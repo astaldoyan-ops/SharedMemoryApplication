@@ -1,4 +1,7 @@
 *.ipch
+*.tlog
+*.vsidx
+.vs/
 
 # Prerequisites
 *.d
