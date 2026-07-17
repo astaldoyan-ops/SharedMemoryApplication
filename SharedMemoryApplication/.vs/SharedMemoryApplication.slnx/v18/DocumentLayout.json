@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Consumer\\Consumer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|solutionrelative:Consumer\\Consumer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\Producer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|solutionrelative:Producer\\Producer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Consumer.cpp",
+              "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Consumer\\Consumer.cpp",
+              "RelativeDocumentMoniker": "Consumer\\Consumer.cpp",
+              "ToolTip": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Consumer\\Consumer.cpp",
+              "RelativeToolTip": "Consumer\\Consumer.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-07-17T14:51:56.393Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Producer.cpp",
+              "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\Producer.cpp",
+              "RelativeDocumentMoniker": "Producer\\Producer.cpp",
+              "ToolTip": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\Producer.cpp",
+              "RelativeToolTip": "Producer\\Producer.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-07-17T14:49:50.074Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

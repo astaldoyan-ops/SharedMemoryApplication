@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Consumer/Consumer.vcxproj" />
+  <Project Path="Producer/Producer.vcxproj" />
+</Solution>
