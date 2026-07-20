@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+
 namespace Applications {
 
 	class CApplication
@@ -31,4 +33,13 @@ namespace Algorythms {
 
 	};
 
+}
+
+namespace Framing {
+
+	struct Header {
+		std::chrono::high_resolution_clock m_timestamp;
+		unsigned long m_sequenceNumber;
+		Algorythms::CRC::CRC8 m_Crc8;
+	};
 }

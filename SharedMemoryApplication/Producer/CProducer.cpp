@@ -2,7 +2,7 @@
 
 namespace Producers {
 
-	CProducer::CProducer( unsigned long _size, std::function<void( char* _addr, unsigned long _size )> _filler )
+	CProducer::CProducer( unsigned long _size, Filler& _filler )
 	{}
 
 	Applications::CApplication& CProducer::run( ) {
