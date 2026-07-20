@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|solutionrelative:BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\CProducer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|solutionrelative:Producer\\CProducer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\PROJECTS\\SHAREDMEMORYAPPLICATION\\SHAREDMEMORYAPPLICATION\\SHAREDMEMORYAPPLICATION\\BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|solutionrelative:BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\Producer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
@@ -63,12 +63,11 @@
               "RelativeToolTip": "Producer\\CProducer.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-07-17T17:03:00.041Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-17T17:03:00.041Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Basics.h",
               "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Basics\\Basics.h",
               "RelativeDocumentMoniker": "Basics\\Basics.h",
@@ -89,18 +88,17 @@
               "RelativeToolTip": "Basics\\Basics.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-07-17T15:04:54.955Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-17T15:04:54.955Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CProducer.h",
               "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\CProducer.h",
               "RelativeDocumentMoniker": "Producer\\CProducer.h",
               "ToolTip": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\CProducer.h",
               "RelativeToolTip": "Producer\\CProducer.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-07-17T15:02:10.069Z",
               "EditorCaption": ""
@@ -115,8 +113,7 @@
               "RelativeToolTip": "Consumer\\Consumer.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-07-17T14:51:56.393Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-17T14:51:56.393Z"
             },
             {
               "$type": "Document",
@@ -128,8 +125,7 @@
               "RelativeToolTip": "Producer\\Producer.cpp",
               "ViewState": "AgIAAAMAAAAAAAAAAAAswBoAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-07-17T14:49:50.074Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-17T14:49:50.074Z"
             }
           ]
         }
