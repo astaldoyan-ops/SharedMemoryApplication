@@ -10,7 +10,7 @@ static std::string segment{"Constant work and lack of entertainment made Jack a 
 
 int main(int _argc, char **_argv)
 {
-    if( _argc == 1 ) {
+    if( _argc == 2 ) {
         
         std::cout << "Producer is running!" << std::endl;
      

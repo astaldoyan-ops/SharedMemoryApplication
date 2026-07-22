@@ -43,3 +43,7 @@ namespace Framing {
 		Algorythms::CRC::CRC8 m_Crc8;
 	};
 }
+
+namespace Signals {
+	const char chEscape{ 0x1B };
+}
