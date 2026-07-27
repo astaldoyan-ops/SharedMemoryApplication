@@ -1,7 +1,8 @@
 #pragma once
-#include "..\Basics\Basics.h"
 
+#include "../Basics/Basics.h"
 
+#include <memory>
 #include <functional>
 
 namespace Producers {

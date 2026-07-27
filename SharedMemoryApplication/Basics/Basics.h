@@ -1,9 +1,15 @@
 #pragma once
 
+#include <pthread.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+
+#include <string>
 #include <chrono>
 #include <functional>
 
-#include "MyPosix.h"
+//#include "MyPosix.h"
 
 namespace Signals {
 	const char chEscape{ 0x1B };
@@ -89,7 +95,7 @@ namespace Ipcs {
 		CMutex& release( ) { pthread_mutex_unlock( &m_object ); return *this; }
 
 	private:
-		CMutex( );
+        CMutex( ) = default;
 		pthread_mutex_t m_object;
 	};
 

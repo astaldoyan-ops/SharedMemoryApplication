@@ -6,6 +6,8 @@ project(SharedMemoryApplication LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set  ( includes ./Basics/ )
+
 # Add your individual sub-projects (folders where .vcxproj files sit)
 add_subdirectory(Producer)
 add_subdirectory(Consumer)

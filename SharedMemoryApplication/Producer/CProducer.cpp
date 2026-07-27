@@ -1,6 +1,8 @@
 #include "CProducer.h"
 
-#include <conio.h>
+#include <cstring>
+#include <exception>
+#include <stdexcept>
 
 namespace Producers {
 
@@ -26,8 +28,10 @@ namespace Producers {
 
 	bool CProducer::toStop( ) const
 	{
-		if( _kbhit( ) && ( _getch( ) == Signals::chEscape ) ) return true;
-		else return false;
+        //if( _kbhit( ) && ( _getch( ) == Signals::chEscape ) ) return true;
+        //else return false;
+
+        return false;
 	}
 
 	CProducer::CSubmitter::CSubmitter( size_t _payloadSize )
@@ -61,7 +65,7 @@ namespace Producers {
 			memcpy( storage + sizeof( Framing::Header ), _frame.payload().c_str( ), m_payloadSize );
 
 			if( -1 == munmap( storage, sizeof( Framing::Header ) + m_payloadSize ) ) {
-				throw std::exception( "Submitter: Unable to unmap shared memory object" );
+                throw std::runtime_error( "Submitter: Unable to unmap shared memory object" );
 			}
 		}
 

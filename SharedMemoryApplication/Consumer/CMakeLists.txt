@@ -1,0 +1,10 @@
+add_executable(Consumer 
+    Consumer.cpp
+    CConsumer.cpp
+)
+
+
+
+# Replaces "Preprocessor Definitions"
+target_compile_definitions(Consumer PRIVATE LOG_LEVEL=3)
+
