@@ -41,10 +41,25 @@ namespace Framing {
 
 	using Filler = std::function<void( std::string& dest, size_t _size )>;
 
+	size_t number( ) {
+		static size_t value{ 0 };
+		return ++value;
+	}
+
 	struct Header {
-		std::chrono::high_resolution_clock m_timestamp;
+		Header( )
+			: m_timestamp( std::chrono::high_resolution_clock::now() )
+			, m_sequenceNumber( number() )
+			, m_hash( 0 )
+		{}
+
+		Header& finish( const std::string& _payload) {
+			m_hash = std::hash<std::string>{}( _payload );
+			return *this;
+		}
+		std::chrono::time_point<std::chrono::high_resolution_clock> m_timestamp;
 		size_t m_sequenceNumber;
-		Algorythms::CRC::CRC8 m_Crc8;
+		size_t m_hash;
 	};
 
 	struct Frame {
@@ -53,6 +68,7 @@ namespace Framing {
 		Frame( size_t _payloadSize, Filler& _filler );
 		Framing::Header* header( ) { return &m_header; }
 		std::string& payload( ) { return m_payload; }
+		Frame& finish( ) { m_header.finish( m_payload ); return *this; }
 	private:
 		Filler& m_filler;
 		Framing::Header m_header;

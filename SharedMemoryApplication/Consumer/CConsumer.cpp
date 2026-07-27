@@ -60,6 +60,7 @@ namespace Consumers {
 
             memcpy( _frame.header( ), inStorage, sizeof( Framing::Header ) );
             _frame.payload( ) = std::move( std::string( reinterpret_cast<const char *>( & inStorage[1] ), m_payloadSize ) );
+            _frame.finish( );
 
             inStorage->m_sequenceNumber = 0;    // mark frame received
 

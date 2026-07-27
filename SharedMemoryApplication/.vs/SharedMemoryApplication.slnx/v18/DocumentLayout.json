@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|C:\\PROJECTS\\SHAREDMEMORYAPPLICATION\\SHAREDMEMORYAPPLICATION\\SHAREDMEMORYAPPLICATION\\BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|solutionrelative:BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Consumer\\CConsumer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|solutionrelative:Consumer\\CConsumer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\CProducer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|solutionrelative:Producer\\CProducer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|C:\\PROJECTS\\SHAREDMEMORYAPPLICATION\\SHAREDMEMORYAPPLICATION\\SHAREDMEMORYAPPLICATION\\BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{6DAA1B2A-4615-4812-84D9-F58A5F59FC3D}|Consumer\\Consumer.vcxproj|solutionrelative:BASICS\\BASICS.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3DC24A38-2718-4A55-AD40-7E969E369085}|Producer\\Producer.vcxproj|C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\CProducer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -49,7 +49,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Document",
@@ -92,13 +92,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "CConsumer.cpp",
               "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Consumer\\CConsumer.cpp",
               "RelativeDocumentMoniker": "Consumer\\CConsumer.cpp",
               "ToolTip": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Consumer\\CConsumer.cpp",
               "RelativeToolTip": "Consumer\\CConsumer.cpp",
-              "ViewState": "AgIAAAQAAAAAAAAAAADgvw8AAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAC8AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-07-22T10:35:24.32Z",
               "EditorCaption": ""
@@ -118,7 +118,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "CProducer.cpp",
               "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Producer\\CProducer.cpp",
               "RelativeDocumentMoniker": "Producer\\CProducer.cpp",
@@ -144,13 +144,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Basics.h",
               "DocumentMoniker": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Basics\\Basics.h",
               "RelativeDocumentMoniker": "Basics\\Basics.h",
               "ToolTip": "C:\\Projects\\SharedMemoryApplication\\SharedMemoryApplication\\SharedMemoryApplication\\Basics\\Basics.h",
               "RelativeToolTip": "Basics\\Basics.h",
-              "ViewState": "AgIAABwAAAAAAAAAAAAAwDYAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAADgvzkAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-07-17T15:11:14.59Z",
               "EditorCaption": ""
