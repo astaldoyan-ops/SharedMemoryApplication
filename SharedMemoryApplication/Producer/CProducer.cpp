@@ -21,6 +21,13 @@ namespace Producers {
 		return *this;
 	}
 
+    std::unique_ptr<Framing::Frame> CProducer::createFrame( ) {
+        auto product = std::make_unique<Framing::Frame>(m_payloadSize, m_filler);
+        product->finish();
+
+        return std::move(product);
+    }
+
 	void CProducer::processFrame( ) {
 		auto frame = createFrame( );
 		m_ipc.process( *frame);
