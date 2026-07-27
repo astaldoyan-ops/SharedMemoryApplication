@@ -6,38 +6,36 @@
 
 namespace Producers {
 
-	using Filler = std::function<void( std::string& dest, unsigned long _size )>;
+	
 
 	class CProducer: public Applications::CApplication
 	{
 		
 
 	public:
-		CProducer( unsigned long _size, Filler& _filler );
+		CProducer( size_t _size, Framing::Filler& _filler );
 		Applications::CApplication& run( ) override;
 
 	private:
 
-		struct Frame {
+		class CSubmitter : public Ipcs::CIpcUnit
+		{
 		public:
-			
-			Frame( unsigned long _payloadSize, Filler& _filler );
-			Framing::Header* header( ) { return &m_header; }
-			const std::string& payload( ) const { return m_payload; }
+			CSubmitter( size_t _payloadSize );
+			CIpcUnit& process( Framing::Frame& _frame ) override;
 		private:
-			Filler& m_filler;
-			Framing::Header m_header;
-			std::string m_payload;
+			size_t m_payloadSize;
+			size_t m_frameCounter;
 		};
 
-		unsigned long m_payloadSize;
-		Filler m_filler;
+		size_t m_payloadSize;
+		Framing::Filler m_filler;
 
-		bool createIpc( );
+		CSubmitter m_ipc;
 
 		bool emplacePayload( char * _start );
 		bool emplaceHeader( Framing::Header * _location );
-		std::unique_ptr<Frame> createFrame( );
+		std::unique_ptr<Framing::Frame> createFrame( );
 
 		void processFrame( );
 

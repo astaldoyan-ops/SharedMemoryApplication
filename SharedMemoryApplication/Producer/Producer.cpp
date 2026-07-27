@@ -14,12 +14,12 @@ int main(int _argc, char **_argv)
         
         std::cout << "Producer is running!" << std::endl;
      
-        unsigned long payloadSize = std::atoi( _argv[1] );
+        size_t payloadSize = std::atoi( _argv[1] );
 
-        Producers::Filler filler{
-            [payloadSize]( std::string& _dest, unsigned long _size )->void {
+        Framing::Filler filler{
+            [payloadSize]( std::string& _dest, size_t _size )->void {
 
-                auto toWriteSize = std::min( payloadSize, static_cast<unsigned long>( segment.length( ) ) );
+                auto toWriteSize = std::min( payloadSize, static_cast<size_t>( segment.length( ) ) );
                 auto rest = payloadSize;
 
                 while( rest > 0 ) {
