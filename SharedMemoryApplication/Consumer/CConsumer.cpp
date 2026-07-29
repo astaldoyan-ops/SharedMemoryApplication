@@ -1,6 +1,10 @@
 #include "CConsumer.h"
 
-#include <conio.h>
+#include <cstring>
+#include <exception>
+#include <stdexcept>
+
+#include <iostream>
 
 namespace Consumers {
 
@@ -12,6 +16,7 @@ namespace Consumers {
 
         Framing::Frame frame( m_ipc.storageSize( ) );
         m_ipc.process( frame );
+        std::cout << frame.payload() << std::endl;
 
         return *this;
     }
@@ -26,7 +31,7 @@ namespace Consumers {
 
     bool CConsumer::toStop( ) const
     {
-        if( _kbhit( ) && ( _getch( ) == Signals::chEscape ) ) return true;
+        if( Signals::kbhit( ) && ( Signals::getKey()  == Signals::chEscape ) ) return true;
         else return false;
     }
 
@@ -34,6 +39,13 @@ namespace Consumers {
         : m_payloadSize(0)
         , m_sequenceNumber(0)
     {
+        m_ShmFileDescriptor = shm_open( Ipcs::s_objectName.c_str(), O_RDWR, 0666 );
+    }
+
+    size_t CConsumer::CReceiver::getFrameSize() {
+        struct stat stats;
+        fstat( m_ShmFileDescriptor, &stats );
+        return stats.st_size;
     }
 
     Ipcs::CIpcUnit& CConsumer::CReceiver::process( Framing::Frame& _frame )
@@ -43,10 +55,7 @@ namespace Consumers {
         while( !frameUpdated ) {
 
             Ipcs::CGuard g;
-
-            struct stat stats;
-            fstat( m_ShmFileDescriptor, &stats );
-            auto objSize = stats.st_size;
+            auto objSize = getFrameSize();
             m_payloadSize = objSize - sizeof( Framing::Header );
             auto *storage = mmap( nullptr, objSize, PROT_READ, MAP_PRIVATE, m_ShmFileDescriptor, 0 );
 
@@ -65,8 +74,9 @@ namespace Consumers {
             inStorage->m_sequenceNumber = 0;    // mark frame received
 
             if( -1 == munmap( storage, objSize ) ) {
-                throw std::exception( "Receiver: Unable to unmap shared memory object" );
+                throw std::runtime_error( "Receiver: Unable to unmap shared memory object" );
             }
+
 
         }
 

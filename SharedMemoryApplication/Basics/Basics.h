@@ -1,18 +1,59 @@
 #pragma once
 
+#include <string>
+#include <chrono>
+#include <functional>
+
 #include <pthread.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-
-#include <string>
-#include <chrono>
-#include <functional>
+#include <unistd.h>
+#include <termios.h>
 
 //#include "MyPosix.h"
 
 namespace Signals {
 	const char chEscape{ 0x1B };
+
+    static bool kbhit() {
+        struct termios oldt, newt;
+        int ch;
+        int oldf;
+
+        // Get current terminal settings
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+
+        // Disable canonical mode (buffered i/o) and local echo
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+        // Make stdin non-blocking
+        oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+        fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+        // Try to read a character
+        ch = getchar();
+
+        // Restore original terminal settings and blocking mode
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+        // If a character was successfully read, a key was pressed
+        if (ch != EOF) {
+            ungetc(ch, stdin); // Put the character back into the stream
+            return true;
+        }
+
+        return false;
+    }
+
+    static char getKey() {
+        char product;
+        read(STDIN_FILENO, &product, 1);
+        return product;
+    }
 }
 
 namespace Algorythms {
@@ -47,7 +88,7 @@ namespace Framing {
 
 	using Filler = std::function<void( std::string& dest, size_t _size )>;
 
-	size_t number( ) {
+    static size_t number( ) {
 		static size_t value{ 0 };
 		return ++value;
 	}
@@ -70,13 +111,21 @@ namespace Framing {
 
 	struct Frame {
 	public:
-		Frame( size_t _payloadSize );
-		Frame( size_t _payloadSize, Filler& _filler );
+        Frame( size_t _payloadSize )
+            : m_payloadSize(_payloadSize)
+        {}
+        Frame( size_t _payloadSize, Filler& _filler )
+            : m_payloadSize(_payloadSize)
+            , m_filler(_filler)
+        {
+            m_filler(m_payload, m_payloadSize);
+        }
 		Framing::Header* header( ) { return &m_header; }
 		std::string& payload( ) { return m_payload; }
 		Frame& finish( ) { m_header.finish( m_payload ); return *this; }
 	private:
-		Filler& m_filler;
+        size_t m_payloadSize;
+        Filler m_filler;
 		Framing::Header m_header;
 		std::string m_payload;
 	};
@@ -104,9 +153,12 @@ namespace Ipcs {
 	class CIpcUnit
 	{
 	public:
-		CIpcUnit( ) {
-			m_ShmFileDescriptor = shm_open( s_objectName.c_str(), O_CREAT | O_RDWR, 0666 );
-		}
+        CIpcUnit( ) {}
+
+        virtual ~CIpcUnit() {
+            close(m_ShmFileDescriptor);
+            shm_unlink(s_objectName.c_str());
+        }
 
 		size_t storageSize( ) const {
 			struct stat stats;

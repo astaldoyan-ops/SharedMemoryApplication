@@ -6,13 +6,10 @@
 #include <functional>
 
 namespace Producers {
-
 	
 
 	class CProducer: public Applications::CApplication
 	{
-		
-
 	public:
 		CProducer( size_t _size, Framing::Filler& _filler );
 		Applications::CApplication& run( ) override;
@@ -34,8 +31,8 @@ namespace Producers {
 
 		CSubmitter m_ipc;
 
-		bool emplacePayload( char * _start );
-		bool emplaceHeader( Framing::Header * _location );
+        //bool emplacePayload( char * _start );
+        //bool emplaceHeader( Framing::Header * _location );
 		std::unique_ptr<Framing::Frame> createFrame( );
 
 		void processFrame( );

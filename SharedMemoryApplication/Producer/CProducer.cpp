@@ -35,8 +35,8 @@ namespace Producers {
 
 	bool CProducer::toStop( ) const
 	{
-        //if( _kbhit( ) && ( _getch( ) == Signals::chEscape ) ) return true;
-        //else return false;
+        if( Signals::kbhit( ) && ( Signals::getKey() == Signals::chEscape ) ) return true;
+        else return false;
 
         return false;
 	}
@@ -45,7 +45,7 @@ namespace Producers {
 		: m_payloadSize( _payloadSize )
 		, m_frameCounter(0)
 	{
-		
+        m_ShmFileDescriptor = shm_open( Ipcs::s_objectName.c_str(), O_CREAT | O_RDWR, 0666 );
 	}
 
 	Ipcs::CIpcUnit& CProducer::CSubmitter::process( Framing::Frame& _frame )
