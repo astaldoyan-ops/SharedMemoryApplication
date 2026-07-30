@@ -58,8 +58,12 @@ namespace Consumers {
     bool CConsumer::toStop( ) const
     {
         auto ch = Signals::kbhit_getKey();
-        if( ch == Signals::chEscape ) return true;
-        else return false;
+        if( ch == Signals::chEscape ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     CConsumer::CReceiver::CReceiver( )
