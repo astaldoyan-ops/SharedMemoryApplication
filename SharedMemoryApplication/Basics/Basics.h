@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <chrono>
 #include <functional>
@@ -10,13 +11,16 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <termios.h>
+#include <semaphore.h>
 
 //#include "MyPosix.h"
+
+#pragma pack (1)
 
 namespace Signals {
 	const char chEscape{ 0x1B };
 
-    static bool kbhit() {
+    static char kbhit_getKey() {
         struct termios oldt, newt;
         int ch;
         int oldf;
@@ -42,17 +46,10 @@ namespace Signals {
 
         // If a character was successfully read, a key was pressed
         if (ch != EOF) {
-            ungetc(ch, stdin); // Put the character back into the stream
-            return true;
+            return ch;
         }
 
-        return false;
-    }
-
-    static char getKey() {
-        char product;
-        read(STDIN_FILENO, &product, 1);
-        return product;
+        return EOF;
     }
 }
 
@@ -93,7 +90,14 @@ namespace Framing {
 		return ++value;
 	}
 
+    struct Fields {
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_timestamp;
+        size_t m_sequenceNumber;
+        size_t m_hash;
+    };
+
 	struct Header {
+
 		Header( )
 			: m_timestamp( std::chrono::high_resolution_clock::now() )
 			, m_sequenceNumber( number() )
@@ -104,13 +108,14 @@ namespace Framing {
 			m_hash = std::hash<std::string>{}( _payload );
 			return *this;
 		}
-		std::chrono::time_point<std::chrono::high_resolution_clock> m_timestamp;
-		size_t m_sequenceNumber;
-		size_t m_hash;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_timestamp;
+        size_t m_sequenceNumber;
+        size_t m_hash;
 	};
 
 	struct Frame {
 	public:
+
         Frame( size_t _payloadSize )
             : m_payloadSize(_payloadSize)
         {}
@@ -122,7 +127,10 @@ namespace Framing {
         }
 		Framing::Header* header( ) { return &m_header; }
 		std::string& payload( ) { return m_payload; }
-		Frame& finish( ) { m_header.finish( m_payload ); return *this; }
+        Frame& finish( ) {
+            m_header.finish( m_payload );
+            return *this;
+        }
 	private:
         size_t m_payloadSize;
         Filler m_filler;
@@ -136,19 +144,17 @@ namespace Ipcs {
 	class CMutex
 	{
 	public:
-		static CMutex& instance( ) {
-			static CMutex s_instance;
-			return s_instance;
-		};
-		CMutex& lock( ) { pthread_mutex_lock( &m_object ); return *this; }
-		CMutex& release( ) { pthread_mutex_unlock( &m_object ); return *this; }
+        CMutex( ) { }
+        virtual ~CMutex() { }
+        CMutex& lock( ) { sem_wait( m_object ); return *this; }
+        CMutex& release( ) { sem_post( m_object ); return *this; }
 
-	private:
-        CMutex( ) = default;
-		pthread_mutex_t m_object;
+    protected:
+        sem_t * m_object;
+        std::string m_name = "/DeviroDedicatedMutex";
 	};
 
-	static const std::string s_objectName = "Created Boa Dedicated Deviro Shared Memory object";
+    static const std::string s_objectName = "/CreatedBoaDedicatedDeviroSharedMemoryObject";
 
 	class CIpcUnit
 	{
@@ -172,12 +178,7 @@ namespace Ipcs {
 		int m_ShmFileDescriptor;
 	};
 
-	class CGuard
-	{
-	public:
-		CGuard( ) { CMutex::instance( ).lock( ); }
-		~CGuard( ) { CMutex::instance( ).release( ); }
-	};
+
 
 }
 

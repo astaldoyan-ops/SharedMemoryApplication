@@ -5,6 +5,32 @@
 #include <stdexcept>
 
 #include <iostream>
+#include <thread>
+
+namespace Ipcs {
+    class CMutexReceive: public CMutex
+    {
+    private:
+        CMutexReceive() {
+            m_object = sem_open(m_name.c_str(), 0);
+        }
+    public:
+        virtual ~CMutexReceive() {
+            sem_close(m_object);
+        }
+        static CMutexReceive& instance() {
+            static CMutexReceive s_instance;
+            return s_instance;
+        }
+    };
+
+    class CGuardReceive
+    {
+    public:
+        CGuardReceive( ) { CMutexReceive::instance( ).lock(); }
+        virtual ~CGuardReceive( ) { CMutexReceive::instance( ).release( ); }
+    };
+}
 
 namespace Consumers {
 
@@ -31,7 +57,8 @@ namespace Consumers {
 
     bool CConsumer::toStop( ) const
     {
-        if( Signals::kbhit( ) && ( Signals::getKey()  == Signals::chEscape ) ) return true;
+        auto ch = Signals::kbhit_getKey();
+        if( ch == Signals::chEscape ) return true;
         else return false;
     }
 
@@ -39,6 +66,7 @@ namespace Consumers {
         : m_payloadSize(0)
         , m_sequenceNumber(0)
     {
+        std::cout << Ipcs::s_objectName.c_str() << std::endl;
         m_ShmFileDescriptor = shm_open( Ipcs::s_objectName.c_str(), O_RDWR, 0666 );
     }
 
@@ -54,20 +82,24 @@ namespace Consumers {
 
         while( !frameUpdated ) {
 
-            Ipcs::CGuard g;
+            Ipcs::CGuardReceive g;
             auto objSize = getFrameSize();
             m_payloadSize = objSize - sizeof( Framing::Header );
-            auto *storage = mmap( nullptr, objSize, PROT_READ, MAP_PRIVATE, m_ShmFileDescriptor, 0 );
+            auto *storage = mmap( nullptr, objSize, PROT_READ | PROT_WRITE, MAP_SHARED, m_ShmFileDescriptor, 0 );
 
             if( MAP_FAILED == storage ) continue;
 
-            auto* inStorage = reinterpret_cast<Framing::Header*>( storage );
+            auto* inStorage = reinterpret_cast<Framing::Fields*>( storage );
             if( inStorage->m_sequenceNumber > m_sequenceNumber ) {
                 m_sequenceNumber = inStorage->m_sequenceNumber;
+                frameUpdated = true;
             }
-            else continue;
+            else {
+                std::cerr << "Frame not updated by producer" << std::endl;
+                continue;
+            }
 
-            memcpy( _frame.header( ), inStorage, sizeof( Framing::Header ) );
+            memcpy( _frame.header( ), inStorage, sizeof( Framing::Fields ) );
             _frame.payload( ) = std::move( std::string( reinterpret_cast<const char *>( & inStorage[1] ), m_payloadSize ) );
             _frame.finish( );
 
@@ -76,8 +108,6 @@ namespace Consumers {
             if( -1 == munmap( storage, objSize ) ) {
                 throw std::runtime_error( "Receiver: Unable to unmap shared memory object" );
             }
-
-
         }
 
         return *this;

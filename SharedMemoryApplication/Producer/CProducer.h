@@ -24,6 +24,7 @@ namespace Producers {
 		private:
 			size_t m_payloadSize;
 			size_t m_frameCounter;
+            bool m_firstFrame;
 		};
 
 		size_t m_payloadSize;
