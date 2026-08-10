@@ -32,8 +32,6 @@ namespace Producers {
 
 		CSubmitter m_ipc;
 
-        //bool emplacePayload( char * _start );
-        //bool emplaceHeader( Framing::Header * _location );
 		std::unique_ptr<Framing::Frame> createFrame( );
 
 		void processFrame( );

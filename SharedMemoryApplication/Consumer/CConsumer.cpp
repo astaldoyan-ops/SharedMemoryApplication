@@ -69,6 +69,7 @@ namespace Consumers {
     CConsumer::CReceiver::CReceiver( )
         : m_payloadSize(0)
         , m_sequenceNumber(0)
+        , m_header(false)
     {
         std::cout << Ipcs::s_objectName.c_str() << std::endl;
         m_ShmFileDescriptor = shm_open( Ipcs::s_objectName.c_str(), O_RDWR, 0666 );
@@ -78,6 +79,13 @@ namespace Consumers {
         struct stat stats;
         fstat( m_ShmFileDescriptor, &stats );
         return stats.st_size;
+    }
+
+    bool CConsumer::CReceiver::checkIfHeaderValid(const Framing::Header& _header) const {
+        return
+            (m_header.m_timestamp < _header.m_timestamp)
+            &&
+            (m_header.m_sequenceNumber + 1 == _header.m_sequenceNumber);
     }
 
     Ipcs::CIpcUnit& CConsumer::CReceiver::process( Framing::Frame& _frame )
@@ -94,7 +102,7 @@ namespace Consumers {
             if( MAP_FAILED == storage ) continue;
 
             auto* inStorage = reinterpret_cast<Framing::Fields*>( storage );
-            if( inStorage->m_sequenceNumber > m_sequenceNumber ) {
+            if( inStorage->m_sequenceNumber == m_sequenceNumber+1 ) {
                 m_sequenceNumber = inStorage->m_sequenceNumber;
                 frameUpdated = true;
             }
@@ -104,6 +112,10 @@ namespace Consumers {
             }
 
             memcpy( _frame.header( ), inStorage, sizeof( Framing::Fields ) );
+            if(! checkIfHeaderValid( *_frame.header() ) ) {
+                continue;
+            }
+            m_header = *_frame.header();
             _frame.payload( ) = std::move( std::string( reinterpret_cast<const char *>( & inStorage[1] ), m_payloadSize ) );
             _frame.finish( );
 

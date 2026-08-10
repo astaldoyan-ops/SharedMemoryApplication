@@ -19,6 +19,9 @@ namespace Consumers {
 			size_t m_sequenceNumber;
 
             size_t getFrameSize();
+
+            bool checkIfHeaderValid(const Framing::Header& _header) const;
+            Framing::Header m_header;
 		};
 
 		CConsumer( );

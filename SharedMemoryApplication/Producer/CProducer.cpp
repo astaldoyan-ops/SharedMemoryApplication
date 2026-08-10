@@ -87,8 +87,6 @@ namespace Producers {
 	{
 		bool lastFrameReceived{ false };
 
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
 		while( !lastFrameReceived ) {
 
             Ipcs::CGuardSubmit g;

@@ -5,29 +5,40 @@
 
 #include <algorithm>
 #include <iostream>
+#include <string>
 
-static const std::string segment{"Constant work and lack of entertainment made Jack a boring guy."};
 
 int main(int _argc, char **_argv)
 {
+    std::string segment;
+
     if( _argc == 2 ) {
         
         std::cout << "Producer is running!" << std::endl;
      
         size_t payloadSize = std::atoi( _argv[1] );
 
+        for(size_t i=0; i<payloadSize; ++i) {
+            segment.append(std::to_string(i % 10));
+        }
+
         Framing::Filler filler{
-            [payloadSize]( std::string& _dest, size_t _size )->void {
+            [&segment, payloadSize]( std::string& _dest, size_t _size )->void {
+
+                static size_t startIndex = 0;
 
                 _dest.clear();
 
-                auto toWriteSize = std::min( payloadSize, static_cast<size_t>( segment.length( ) ) );
-                auto rest = payloadSize;
+                if(startIndex + 1 > segment.size()) {
+                     startIndex = 0;
+                }
 
-                while( static_cast<int>(rest) > 0 ) {
-                    _dest.append( segment, 0, toWriteSize );
-                    rest -= toWriteSize;
-                };
+                auto toEnd = segment.size() - startIndex;
+
+                _dest.append( segment, startIndex, toEnd );
+                _dest.append( segment, 0, startIndex );
+
+                ++startIndex;
 
                 std::cout << __FUNCTION__ << " " << _dest << std::endl;
             }

@@ -104,6 +104,13 @@ namespace Framing {
 			, m_hash( 0 )
 		{}
 
+        Header( bool )
+            : m_timestamp{}
+            , m_sequenceNumber(0)
+            , m_hash(0)
+        {
+        }
+
 		Header& finish( const std::string& _payload) {
 			m_hash = std::hash<std::string>{}( _payload );
 			return *this;
@@ -151,10 +158,10 @@ namespace Ipcs {
 
     protected:
         sem_t * m_object;
-        std::string m_name = "/DeviroDedicatedMutex";
+        std::string m_name = "/SpecialDedicatedMutex";
 	};
 
-    static const std::string s_objectName = "/CreatedBoaDedicatedDeviroSharedMemoryObject";
+    static const std::string s_objectName = "/CreatedBoaDedicatedSpecdialSharedMemoryObject";
 
 	class CIpcUnit
 	{
