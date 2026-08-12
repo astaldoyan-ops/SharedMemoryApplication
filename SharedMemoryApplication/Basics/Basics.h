@@ -75,6 +75,7 @@ namespace Applications {
 	public:
 		CApplication( ) = default;
 		CApplication( CApplication& ) = delete;
+        virtual ~CApplication() = default;
 
 		virtual CApplication& run( ) = 0;
 	};
