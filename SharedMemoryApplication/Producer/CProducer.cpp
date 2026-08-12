@@ -102,7 +102,7 @@ namespace Producers {
             }
         }
 
-        bool isMaped() const {
+        bool isMapped() const {
             return m_storage != MAP_FAILED;
         }
 
@@ -128,7 +128,7 @@ namespace Producers {
             {
                 CShMemGuard shmGuard(size, m_ShmFileDescriptor);
 
-                if( !shmGuard.isMaped() ) continue;
+                if( !shmGuard.isMapped() ) continue;
 
                 if( m_firstFrame || (size_t(0) == shmGuard.storage()->m_sequenceNumber)) {
                     lastFrameReceived = true;

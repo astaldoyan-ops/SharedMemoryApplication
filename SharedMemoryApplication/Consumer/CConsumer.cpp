@@ -88,6 +88,38 @@ namespace Consumers {
             (m_header.m_sequenceNumber + 1 == _header.m_sequenceNumber);
     }
 
+    class CShMemGuard
+    {
+    public:
+        CShMemGuard(size_t _frameSize, int _descriptor)
+            : m_frameSize(_frameSize)
+        {
+            m_storage = reinterpret_cast<Framing::Fields*>(
+                mmap( nullptr, _frameSize, PROT_READ | PROT_WRITE, MAP_SHARED, _descriptor, 0 )
+            );
+        }
+
+        virtual ~CShMemGuard()
+        {
+            if( -1 == munmap( m_storage, m_frameSize ) ) {
+                std::cerr << "Receiver: Unable to unmap shared memory object" << std::endl;
+            }
+        }
+
+        bool isMapped() const
+        {
+            return MAP_FAILED != m_storage;
+        }
+
+        Framing::Fields * storage()
+        {
+            return m_storage;
+        }
+    private:
+        Framing::Fields * m_storage;
+        int m_frameSize;
+    };
+
     Ipcs::CIpcUnit& CConsumer::CReceiver::process( Framing::Frame& _frame )
     {
         bool frameUpdated{ false };
@@ -95,13 +127,15 @@ namespace Consumers {
         while( !frameUpdated ) {
 
             Ipcs::CGuardReceive g;
+
             auto objSize = getFrameSize();
             m_payloadSize = objSize - sizeof( Framing::Header );
-            auto *storage = mmap( nullptr, objSize, PROT_READ | PROT_WRITE, MAP_SHARED, m_ShmFileDescriptor, 0 );
 
-            if( MAP_FAILED == storage ) continue;
+            CShMemGuard shMemGuard(objSize, m_ShmFileDescriptor);
 
-            auto* inStorage = reinterpret_cast<Framing::Fields*>( storage );
+            if( ! shMemGuard.isMapped() ) continue;
+
+            auto* inStorage = reinterpret_cast<Framing::Fields*>( shMemGuard.storage() );
             if( inStorage->m_sequenceNumber == m_sequenceNumber+1 ) {
                 m_sequenceNumber = inStorage->m_sequenceNumber;
                 frameUpdated = true;
@@ -121,9 +155,7 @@ namespace Consumers {
 
             inStorage->m_sequenceNumber = 0;    // mark frame received
 
-            if( -1 == munmap( storage, objSize ) ) {
-                throw std::runtime_error( "Receiver: Unable to unmap shared memory object" );
-            }
+
         }
 
         return *this;
