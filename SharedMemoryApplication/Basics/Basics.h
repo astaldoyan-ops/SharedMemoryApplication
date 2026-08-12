@@ -164,7 +164,8 @@ namespace Ipcs {
 	class CIpcUnit
 	{
 	public:
-        CIpcUnit( ) {}
+        CIpcUnit( ): m_ShmFileDescriptor{-1}
+        {}
 
         virtual ~CIpcUnit() {
             close(m_ShmFileDescriptor);
@@ -179,10 +180,9 @@ namespace Ipcs {
 
 		virtual CIpcUnit& process( Framing::Frame& _frame ) = 0;
 
-	protected:
+    protected:
 		int m_ShmFileDescriptor;
 	};
-
 
 
 }
