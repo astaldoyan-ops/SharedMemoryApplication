@@ -83,6 +83,38 @@ namespace Producers {
         }
 	}
 
+    class CShMemGuard
+    {
+    public:
+        CShMemGuard(size_t _frameSize, int _descriptor)
+            : m_frameSize{_frameSize}
+        {
+            m_storage = reinterpret_cast<Framing::Fields*> (
+                mmap( nullptr, _frameSize, PROT_READ | PROT_WRITE, MAP_SHARED, _descriptor, 0 )
+            );
+        }
+
+        virtual ~CShMemGuard() {
+            if(m_storage != MAP_FAILED) {
+                if( -1 == munmap( m_storage, m_frameSize ) ) {
+                    std::cerr << "Submitter: Unable to unmap shared memory object" << std::endl;
+                }
+            }
+        }
+
+        bool isMaped() const {
+            return m_storage != MAP_FAILED;
+        }
+
+        Framing::Fields* storage() const {
+            return m_storage;
+        }
+
+    private:
+        Framing::Fields* m_storage;
+        size_t m_frameSize;
+    };
+
 	Ipcs::CIpcUnit& CProducer::CSubmitter::process( Framing::Frame& _frame )
 	{
 		bool lastFrameReceived{ false };
@@ -93,30 +125,26 @@ namespace Producers {
 
             auto size = sizeof( Framing::Fields ) + m_payloadSize;
 
-            auto * storage = reinterpret_cast<Framing::Fields*>(
-                mmap( nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, m_ShmFileDescriptor, 0 )
-			);
+            {
+                CShMemGuard shmGuard(size, m_ShmFileDescriptor);
 
-			if( MAP_FAILED == storage ) continue;
+                if( !shmGuard.isMaped() ) continue;
 
-            if( m_firstFrame || (size_t(0) == storage->m_sequenceNumber)) {
-                lastFrameReceived = true;
+                if( m_firstFrame || (size_t(0) == shmGuard.storage()->m_sequenceNumber)) {
+                    lastFrameReceived = true;
+                }
+                else {
+                    std::cerr << "Last Frame not received" << std::endl;
+                    continue;
+                }
+
+                m_frameCounter = _frame.header( )->m_sequenceNumber;
+
+                memcpy( shmGuard.storage(), _frame.header(), sizeof(Framing::Fields) );
+                memcpy( &(shmGuard.storage()[1]), _frame.payload().c_str( ), m_payloadSize );
+
+                m_firstFrame = false;
             }
-            else {
-                std::cerr << "Last Frame not received" << std::endl;
-                continue;
-            }
-
-			m_frameCounter = _frame.header( )->m_sequenceNumber;
-
-            memcpy( storage, _frame.header(), sizeof(Framing::Fields) );
-            memcpy( &storage[1], _frame.payload().c_str( ), m_payloadSize );
-
-            m_firstFrame = false;
-
-            if( -1 == munmap( storage, sizeof( Framing::Fields ) + m_payloadSize ) ) {
-                throw std::runtime_error( "Submitter: Unable to unmap shared memory object" );
-			}
 
             std::cout << "Stored: " << _frame.payload() << std::endl;
             std::cout << "Frame: " << _frame.header()->m_sequenceNumber << std::endl;
