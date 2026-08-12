@@ -85,10 +85,7 @@ namespace Framing {
 
 	using Filler = std::function<void( std::string& dest, size_t _size )>;
 
-    static size_t number( ) {
-		static size_t value{ 0 };
-		return ++value;
-	}
+    size_t number( );
 
     struct Fields {
         std::chrono::time_point<std::chrono::high_resolution_clock> m_timestamp;

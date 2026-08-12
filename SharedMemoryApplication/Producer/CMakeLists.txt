@@ -1,6 +1,7 @@
 add_executable(Producer 
     Producer.cpp
     CProducer.cpp
+    ../Basics/Basics.cpp
 )
 
 target_include_directories(Producer PUBLIC ${includes})
