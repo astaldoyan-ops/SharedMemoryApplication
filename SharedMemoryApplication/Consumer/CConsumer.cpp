@@ -40,9 +40,12 @@ namespace Consumers {
 
     CConsumer& CConsumer::processFrame( ) {
 
-        Framing::Frame frame( m_ipc.storageSize( ) );
-        m_ipc.process( frame );
-        std::cout << frame.payload() << std::endl;
+        auto storageSize = m_ipc.storageSize( );
+        if(storageSize) {
+            Framing::Frame frame( *storageSize );
+            m_ipc.process( frame );
+            std::cout << frame.payload() << std::endl;
+        }
 
         return *this;
     }

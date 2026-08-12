@@ -4,6 +4,7 @@
 #include <string>
 #include <chrono>
 #include <functional>
+#include <optional>
 
 #include <pthread.h>
 #include <fcntl.h>
@@ -172,7 +173,7 @@ namespace Ipcs {
             shm_unlink(s_objectName.c_str());
         }
 
-		size_t storageSize( ) const {
+        std::optional<size_t> storageSize( ) const {
 			struct stat stats;
 			if( 0 == fstat( m_ShmFileDescriptor, &stats ) ) return stats.st_size;
 			else return -1;
