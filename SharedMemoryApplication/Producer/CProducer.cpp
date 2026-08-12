@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <thread>
 
-#pragma pack (1)
+#pragma pack (pop, 1)
 
 namespace Ipcs {
 
