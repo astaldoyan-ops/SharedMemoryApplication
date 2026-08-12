@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma pack (push, 1)
+
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -98,15 +100,15 @@ namespace Framing {
 	struct Header {
 
 		Header( )
-			: m_timestamp( std::chrono::high_resolution_clock::now() )
-			, m_sequenceNumber( number() )
-			, m_hash( 0 )
+            : m_timestamp{ std::chrono::high_resolution_clock::now() }
+            , m_sequenceNumber{ number() }
+            , m_hash{ 0 }
 		{}
 
         Header( bool )
             : m_timestamp{}
-            , m_sequenceNumber(0)
-            , m_hash(0)
+            , m_sequenceNumber{0}
+            , m_hash{0}
         {
         }
 
@@ -123,11 +125,11 @@ namespace Framing {
 	public:
 
         Frame( size_t _payloadSize )
-            : m_payloadSize(_payloadSize)
+            : m_payloadSize{_payloadSize}
         {}
         Frame( size_t _payloadSize, Filler& _filler )
-            : m_payloadSize(_payloadSize)
-            , m_filler(_filler)
+            : m_payloadSize{_payloadSize}
+            , m_filler{_filler}
         {
             m_filler(m_payload, m_payloadSize);
         }

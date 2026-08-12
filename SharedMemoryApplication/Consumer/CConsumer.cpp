@@ -34,9 +34,8 @@ namespace Ipcs {
 
 namespace Consumers {
 
-    CConsumer::CConsumer( )
-    {
-    }
+    CConsumer::CConsumer( ) = default;
+
 
     CConsumer& CConsumer::processFrame( ) {
 
@@ -70,9 +69,9 @@ namespace Consumers {
     }
 
     CConsumer::CReceiver::CReceiver( )
-        : m_payloadSize(0)
-        , m_sequenceNumber(0)
-        , m_header(false)
+        : m_payloadSize{0}
+        , m_sequenceNumber{0}
+        , m_header{false}
     {
         std::cout << Ipcs::s_objectName.c_str() << std::endl;
         m_ShmFileDescriptor = shm_open( Ipcs::s_objectName.c_str(), O_RDWR, 0666 );
@@ -94,8 +93,8 @@ namespace Consumers {
     class CShMemGuard
     {
     public:
-        CShMemGuard(size_t _frameSize, int _descriptor)
-            : m_frameSize(_frameSize)
+        CShMemGuard(int _frameSize, int _descriptor)
+            : m_frameSize{_frameSize}
         {
             m_storage = reinterpret_cast<Framing::Fields*>(
                 mmap( nullptr, _frameSize, PROT_READ | PROT_WRITE, MAP_SHARED, _descriptor, 0 )

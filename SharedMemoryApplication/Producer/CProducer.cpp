@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <thread>
 
-#pragma pack (pop, 1)
+
 
 namespace Ipcs {
 
@@ -38,9 +38,9 @@ namespace Ipcs {
 namespace Producers {
 
 	CProducer::CProducer( size_t _size, Framing::Filler& _filler )
-		: m_payloadSize(_size)
-		, m_filler(_filler)
-		, m_ipc( _size )
+        : m_payloadSize{ _size }
+        , m_filler{ _filler }
+        , m_ipc{ _size }
 	{}
 
 	Applications::CApplication& CProducer::run( ) {
@@ -73,9 +73,9 @@ namespace Producers {
 	}
 
 	CProducer::CSubmitter::CSubmitter( size_t _payloadSize )
-		: m_payloadSize( _payloadSize )
-		, m_frameCounter(0)
-        , m_firstFrame(true)
+        : m_payloadSize{ _payloadSize }
+        , m_frameCounter{ 0 }
+        , m_firstFrame{ true }
 	{
         m_ShmFileDescriptor = shm_open( Ipcs::s_objectName.c_str(), O_CREAT | O_RDWR, 0666 );
         if( -1 == ftruncate(m_ShmFileDescriptor, sizeof(Framing::Header) + m_payloadSize)) {
