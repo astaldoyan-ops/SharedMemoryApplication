@@ -127,37 +127,37 @@ namespace Consumers {
         bool frameUpdated{ false };
 
         while( !frameUpdated ) {
+            {
+                Ipcs::CGuardReceive g;
 
-            Ipcs::CGuardReceive g;
+                auto objSize = getFrameSize();
+                m_payloadSize = objSize - sizeof( Framing::Header );
 
-            auto objSize = getFrameSize();
-            m_payloadSize = objSize - sizeof( Framing::Header );
+                CShMemGuard shMemGuard(objSize, m_ShmFileDescriptor);
 
-            CShMemGuard shMemGuard(objSize, m_ShmFileDescriptor);
+                if( ! shMemGuard.isMapped() ) continue;
 
-            if( ! shMemGuard.isMapped() ) continue;
+                auto* inStorage = reinterpret_cast<Framing::Fields*>( shMemGuard.storage() );
+                if( inStorage->m_sequenceNumber == m_sequenceNumber+1 ) {
+                    m_sequenceNumber = inStorage->m_sequenceNumber;
+                    frameUpdated = true;
+                }
+                else {
+                    std::cerr << "Frame not updated by producer" << std::endl;
+                    continue;
+                }
 
-            auto* inStorage = reinterpret_cast<Framing::Fields*>( shMemGuard.storage() );
-            if( inStorage->m_sequenceNumber == m_sequenceNumber+1 ) {
-                m_sequenceNumber = inStorage->m_sequenceNumber;
-                frameUpdated = true;
+                memcpy( _frame.header( ), inStorage, sizeof( Framing::Fields ) );
+                if(! checkIfHeaderValid( *_frame.header() ) ) {
+                    continue;
+                }
+                m_header = *_frame.header();
+                _frame.payload( ) = std::move( std::string( reinterpret_cast<const char *>( & inStorage[1] ), m_payloadSize ) );
+                _frame.finish( );
+
+                inStorage->m_sequenceNumber = 0;    // mark frame received
             }
-            else {
-                std::cerr << "Frame not updated by producer" << std::endl;
-                continue;
-            }
-
-            memcpy( _frame.header( ), inStorage, sizeof( Framing::Fields ) );
-            if(! checkIfHeaderValid( *_frame.header() ) ) {
-                continue;
-            }
-            m_header = *_frame.header();
-            _frame.payload( ) = std::move( std::string( reinterpret_cast<const char *>( & inStorage[1] ), m_payloadSize ) );
-            _frame.finish( );
-
-            inStorage->m_sequenceNumber = 0;    // mark frame received
-
-
+            std::this_thread::yield;
         }
 
         return *this;

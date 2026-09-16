@@ -120,34 +120,36 @@ namespace Producers {
 		bool lastFrameReceived{ false };
 
 		while( !lastFrameReceived ) {
-
-            Ipcs::CGuardSubmit g;
-
-            auto size = sizeof( Framing::Fields ) + m_payloadSize;
-
             {
-                CShMemGuard shmGuard(size, m_ShmFileDescriptor);
+                Ipcs::CGuardSubmit g;
 
-                if( !shmGuard.isMapped() ) continue;
+                auto size = sizeof( Framing::Fields ) + m_payloadSize;
 
-                if( m_firstFrame || (size_t(0) == shmGuard.storage()->m_sequenceNumber)) {
-                    lastFrameReceived = true;
+                {
+                    CShMemGuard shmGuard(size, m_ShmFileDescriptor);
+
+                    if( !shmGuard.isMapped() ) continue;
+
+                    if( m_firstFrame || (size_t(0) == shmGuard.storage()->m_sequenceNumber)) {
+                        lastFrameReceived = true;
+                    }
+                    else {
+                        std::cerr << "Last Frame not received" << std::endl;
+                        continue;
+                    }
+
+                    m_frameCounter = _frame.header( )->m_sequenceNumber;
+
+                    memcpy( shmGuard.storage(), _frame.header(), sizeof(Framing::Fields) );
+                    memcpy( &(shmGuard.storage()[1]), _frame.payload().c_str( ), m_payloadSize );
+
+                    m_firstFrame = false;
                 }
-                else {
-                    std::cerr << "Last Frame not received" << std::endl;
-                    continue;
-                }
 
-                m_frameCounter = _frame.header( )->m_sequenceNumber;
-
-                memcpy( shmGuard.storage(), _frame.header(), sizeof(Framing::Fields) );
-                memcpy( &(shmGuard.storage()[1]), _frame.payload().c_str( ), m_payloadSize );
-
-                m_firstFrame = false;
+                std::cout << "Stored: " << _frame.payload() << std::endl;
+                std::cout << "Frame: " << _frame.header()->m_sequenceNumber << std::endl;
             }
-
-            std::cout << "Stored: " << _frame.payload() << std::endl;
-            std::cout << "Frame: " << _frame.header()->m_sequenceNumber << std::endl;
+            std::this_thread::yield();
 		}
 
 		return *this;
